@@ -1,10 +1,10 @@
 class BlogsController < ApplicationController
-  before_action :set_blog, only: [:show, :edit, :update, :destroy]
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :toggle_status]
 
   # GET /blogs
   # GET /blogs.json
   def index
-    @blogs = Blog.all
+    @blogs = Blog.all.order(:id)
   end
 
   # GET /blogs/1
@@ -19,6 +19,15 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1/edit
   def edit
+  end
+
+  def toggle_status
+    if @blog.draft?
+      @blog.published!
+    else
+      @blog.draft!
+    end
+    redirect_to blogs_path, notice: 'Blog post status changed'
   end
 
   # POST /blogs
